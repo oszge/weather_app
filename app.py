@@ -7,12 +7,12 @@ import db
 def submit():
         
         st.header(
-        f"{CITY}",
+        f"{CITY}, {CODE}",
         text_alignment="center",
         width='stretch'
         )
 
-        geocode_api_url = f"http://api.openweathermap.org/geo/1.0/direct?q={CITY}&limit={LIMIT}&appid={API_KEY}"
+        geocode_api_url = f"http://api.openweathermap.org/geo/1.0/direct?q={CITY},,{CODE}&limit={LIMIT}&appid={API_KEY}"
         geocode_data = db.fetch_coords_from_url(geocode_api_url)
 
         LATITUDE = geocode_data[0]["lat"]
@@ -56,24 +56,38 @@ def submit():
                 width="content",
             )
 
-            st.write(f"Actual weather: {weather_data['weather'][0]['description'].capitalize()}")
-            st.write(f"Wind speed: {weather_data["wind"]["speed"]}(m/s)")
-            st.write(f"Air pressure: {weather_data["main"]["pressure"]}(hPa)")
 
             timezone_offset = weather_data["timezone"]
 
             local_timezone = datetime.timezone(
                 datetime.timedelta(seconds=timezone_offset)
             )
-
             measure_date = datetime.datetime.fromtimestamp(
                 weather_data["dt"],
                 tz=local_timezone
             )
-
+            sunrise = datetime.datetime.fromtimestamp(
+                weather_data["sys"]["sunrise"],
+                tz=local_timezone
+            )
+            sunset = datetime.datetime.fromtimestamp(
+                weather_data["sys"]["sunset"],
+                tz=local_timezone
+            )
+            st.write(f"Actual weather: {weather_data['weather'][0]['description'].capitalize()}")
+            st.write(f"Wind speed: {weather_data["wind"]["speed"]}(m/s)")
+            st.write(f"Air pressure: {weather_data["main"]["pressure"]}(hPa)")
             st.write(
-                f"Data timestamp: "
-                f"{measure_date.strftime('%Y.%m.%d. %H:%M:%S')}"
+                f"Sunrise:  "
+                f"{sunrise.strftime('%H:%M')}"
+            )
+            st.write(
+                f"Sunset:   "
+                f"{sunset.strftime('%H:%M')}"
+            )
+            st.write(
+                f"Date of Measure:   "
+                f"{measure_date.strftime('%Y.%m.%d. - %H:%M:%S')}"
             )
             
             with st.expander("API response_1"):
@@ -106,6 +120,10 @@ with center_column:
         )
         if any(character.isdigit() for character in CITY):
             st.error("The city field cannot contain numbers.")
+        CODE = st.text_input("Country Code: ", placeholder="HU",
+                             width="stretch")
+        if any(character.isdigit() for character in CODE):
+            st.error("The code field cannot contain numbers.")
 
         get_weather_button = st.button(
             "Get weather data of the chosen city",
