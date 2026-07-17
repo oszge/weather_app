@@ -2,7 +2,7 @@ import pandas as pd
 import requests as req
 import streamlit as st
 import datetime 
-import db
+#import db
 
 def submit():
         
@@ -55,7 +55,7 @@ def submit():
                 f"{weather_data['main']['humidity']}%",
                 width="content",
             )
-            
+
             st.write(f"Actual weather: {weather_data['weather'][0]['description'].capitalize()}")
             st.write(f"Wind speed: {weather_data["wind"]["speed"]}(m/s)")
             st.write(f"Air pressure: {weather_data["main"]["pressure"]}(hPa)")
