@@ -1,5 +1,5 @@
-import psycopg2
-import streamlit as st
+#import psycopg2
+#import streamlit as st
 import requests as req
 
 def fetch_coords_from_url(url):
@@ -25,7 +25,7 @@ def fetch_data_from_url(url):
     except req.exceptions.RequestException as e:
             print("Error:", e)
             return None
-
+'''
 def connect():
     try:
         return psycopg2.connect(
@@ -38,3 +38,4 @@ def connect():
     except (psycopg2.Error, ConnectionError) as e:
         ("Error: ", e)
         return None
+'''
