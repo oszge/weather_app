@@ -2,7 +2,7 @@ import pandas as pd
 import requests as req
 import streamlit as st
 import datetime 
-#import db
+import db
 
 def submit():
         
