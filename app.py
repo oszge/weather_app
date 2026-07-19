@@ -9,6 +9,8 @@ import codes
 LIMIT = 1
 API_KEY = st.secrets["openweather"]["api_key"]
 
+
+
 def submit():
         
         selected_country_code = CODE.split("—")[-1].strip()
