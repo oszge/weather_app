@@ -1,4 +1,6 @@
-codes = '''Afghanistan — AF
+codes = '''
+
+Afghanistan — AF
 Albania — AL
 Algeria — DZ
 American Samoa — AS

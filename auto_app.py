@@ -10,14 +10,10 @@ API_KEY = st.secrets["openweather"]["api_key"]
 
 
 st.set_page_config(
-    page_title="Weather",
-    layout="centered",
+    page_title="Simple Weather",
+    layout="centered"
 )
 
-st.title(
-    "Simple Forecast",
-    text_alignment="center",
-)
 
 
 def get_coordinates(CITY, CODE):
@@ -110,7 +106,8 @@ def display_weather(weather_data):
 
     current_refresh_time = datetime.datetime.now(tz=local_timezone)
     st.caption(
-        f"Last update at {current_refresh_time:%H:%M:%S}"
+        f"Last update at {current_refresh_time:%H:%M:%S}",
+        text_alignment="center"
     )
 
     with st.expander("Weather API response"):
@@ -134,26 +131,39 @@ def auto_display():
 
     display_weather(weather_data)
 
+col1,col2,col3 = st.columns([1,2,1])
+with col2:
+    st.subheader(
+    "Selector",
+    text_alignment="left"
+)   
 
-left_column, center_column, right_column = st.columns([2, 6, 2])
+col1,col2,col3=st.columns([1,2,1])
+with col2:
+    with st.container(width="stretch", border=True):
+  
+            city = st.text_input(
+            label="City",
+            label_visibility="visible",
+            width="stretch",
+            placeholder="City"
+        )
 
-with center_column:
-    city = st.text_input(
-        label="The city you are looking for",
-        placeholder="For example: Budapest",
-        width="stretch",
-    )
+            selected_code = st.selectbox(
+            "Code",
+            ["Select country code"] + codes.clean_codes_list,
+            label_visibility="visible",
+            width="stretch",
 
-    selected_code = st.selectbox(
-        "Country Code",
-        ["Hungary — HU"] + codes.clean_codes_list,
-        width="stretch",
-    )
-
+        )
+            
+col1,col2,col3=st.columns([1,2,1])
+with col2:
     get_weather_button = st.button(
-        "Get weather data",
-        width="stretch",
-    )
+            "Get weather data",
+            width="stretch",
+            type="secondary"
+        )
 
 
 if get_weather_button:
@@ -165,6 +175,8 @@ if get_weather_button:
         st.error("Please enter a city.")
     elif any(character.isdigit() for character in cleaned_city):
         st.error("The city field cannot contain numbers.")
+    elif country_code == "Select country code":
+        st.error("Please select a country code.")
     else:
         geocode_result = get_coordinates(cleaned_city, country_code)
 
